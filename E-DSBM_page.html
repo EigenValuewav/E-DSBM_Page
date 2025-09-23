@@ -1,0 +1,539 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-DSBM: ENVELOPE-CONDITIONED SCHRÖDINGER BRIDGE MATCHING WITH TEMPORAL DYNAMICS FOR SPEECH ENHANCEMENT</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 2em; background-color: #f9f9f9; color: #333; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .paper-header {
+            text-align: center;
+            margin-bottom: 3em;
+        }
+        .paper-header h1 {
+            font-size: 2.2em;
+            font-weight: bold;
+            margin-bottom: 0.2em;
+        }
+        .paper-header p {
+            font-size: 1.1em;
+            color: #555;
+            margin: 0.5em 0;
+        }
+        .paper-header .status {
+            font-style: italic;
+            color: #777;
+        }
+
+        .model-figure {
+            text-align: center;
+            margin-bottom: 3em;
+        }
+        .model-figure img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .abstract h2 {
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+        .abstract {
+            /* (기존 스타일) */
+            font-size: 1.3em;
+            padding: 1.5em;
+            background-color: #f9f9f9;
+            border-left: 5px solid #a9c7e8;
+        
+            /* ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ 추가/수정할 부분 ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ */
+            max-width: 65%; /* 최대 너비를 부모 요소의 80%로 제한 (900px 등 고정값도 가능) */
+            margin: 0 auto 3em; /* 위쪽 마진 0, 좌우 마진 auto(중앙정렬), 아래쪽 마진 3em */
+            /* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+        }
+        .paper-header .authors {
+            font-size: 1.5em; /* 저자 이름 크기 (원하는 대로 조절) */
+            font-weight: 600; /* 살짝 굵게 */
+        }
+        
+        .paper-header .affiliation {
+            font-size: 1.6em; /* 소속/학교 크기 (원하는 대로 조절) */
+            font-weight: 700; /* 살짝 굵게 */
+        }
+        .title, .sub-title { text-align: center; }
+        .title { font-size: 2.2em; font-weight: bold; margin-bottom: 1em; }
+        .sub-title { font-size: 1.8em; font-weight: 600; margin-top: 3em; margin-bottom: 1.5em; border-bottom: 2px solid #ddd; padding-bottom: 0.5em; }
+        .grid-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .grid-item { background-color: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: all 0.2s ease-in-out; }
+        .grid-item:hover { transform: translateY(-3px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .grid-item h3 { margin-top: 0; margin-bottom: 10px; font-size: 1em; font-weight: 600; color: #555; }
+        audio { width: 100%; }
+
+        /* ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ 추가된 스타일 ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼ */
+        .grid-item.highlight {
+            background-color: #f0f5fa; /* 은은한 푸른 계열 배경색 */
+            border: 2px solid #a9c7e8;   /* 살짝 더 진한 테두리 색 */
+        }
+        .grid-item.highlight h3 {
+            font-weight: 900;       /* 폰트를 더 굵게 (볼드체) */
+            color: #004a9e;         /* 폰트 색상을 진한 파란색으로 */
+        }
+        /* ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ */
+
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <div class="paper-header">
+            <h1>E-DSBM: ENVELOPE-CONDITIONED SCHRÖDINGER BRIDGE MATCHING WITH TEMPORAL DYNAMICS FOR SPEECH ENHANCEMENT</h1>
+            <p class="status">(ICASSP 2026 under review)</p>
+            <p class="authors">Jin-Hee Lee and Seok-Jun Buu</p>
+            <p class="affiliation">Department of Computer Science and Engineering, Gyeongsang National University</p>
+        </div>
+        </div>
+        
+        <div class="model-figure">
+            <img src="./figure.png" alt="E-DSBM Model Architecture">
+        </div>
+
+        <div class="abstract">
+            <h2>Abstract</h2>
+            <p>
+                Generalization to unseen conditions remains a key challenge in speech enhancement. While recent generative models have been successfully applied to this task, they often fail to explicitly leverage the macroscopic temporal structure of speech, leading to degraded restoration quality or high computational costs. We propose E-DSBM (Envelope-Conditioned Diffusion Schrödinger Bridge Matching), a novel model that optimizes the DSBM framework for speech enhancement by conditioning on the temporal envelope. E-DSBM uses this envelope to guide the restoration of fine spectral details within an SE-optimized, unidirectional, and non-iterative framework. Our model was validated on the VoiceBank+DEMAND test set (seen conditions) and its generalization was further assessed on the recent URGENT 2025 Challenge dataset (unseen conditions). Consequently, E-DSBM demonstrates top-tier performance, improving PESQ scores over competing models by up to 0.75 on the seen dataset and by up to 0.83 on the unseen dataset.
+            </p>
+        </div>
+        
+
+
+
+        <h1 class="title">Speech Enhancement Audio Samples</h1>
+<h2 class="sub-title">Urgent 2025 Dataset (Unseen Conditions)</h2>
+<div class="grid-container">
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="Urgent 2025\top_10_clean\fileid_195.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="Urgent 2025\top_10_noisy\fileid_195.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_CDiffuSE\fileid_195.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_E-DSBM\fileid_195_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="Urgent 2025\top_10_clean\fileid_225.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="Urgent 2025\top_10_noisy\fileid_225.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_CDiffuSE\fileid_225.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_E-DSBM\fileid_225_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="Urgent 2025\top_10_clean\fileid_25.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="Urgent 2025\top_10_noisy\fileid_25.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_CDiffuSE\fileid_25.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_E-DSBM\fileid_25_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="Urgent 2025\top_10_clean\fileid_56.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="Urgent 2025\top_10_noisy\fileid_56.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_CDiffuSE\fileid_56.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_E-DSBM\fileid_56_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="Urgent 2025\top_10_clean\fileid_59.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="Urgent 2025\top_10_noisy\fileid_59.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_CDiffuSE\fileid_59.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_E-DSBM\fileid_59_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="Urgent 2025\top_10_clean\fileid_66.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="Urgent 2025\top_10_noisy\fileid_66.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_CDiffuSE\fileid_66.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_E-DSBM\fileid_66_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="Urgent 2025\top_10_clean\fileid_68.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="Urgent 2025\top_10_noisy\fileid_68.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_CDiffuSE\fileid_68.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_E-DSBM\fileid_68_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="Urgent 2025\top_10_clean\fileid_768.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="Urgent 2025\top_10_noisy\fileid_768.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_CDiffuSE\fileid_768.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_E-DSBM\fileid_768_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="Urgent 2025\top_10_clean\fileid_77.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="Urgent 2025\top_10_noisy\fileid_77.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_CDiffuSE\fileid_77.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_E-DSBM\fileid_77_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="Urgent 2025\top_10_clean\fileid_815.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="Urgent 2025\top_10_noisy\fileid_815.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_CDiffuSE\fileid_815.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_E-DSBM\fileid_815_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="Urgent 2025\top_10_clean\fileid_82.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="Urgent 2025\top_10_noisy\fileid_82.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_CDiffuSE\fileid_82.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_E-DSBM\fileid_82_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="Urgent 2025\top_10_clean\fileid_83.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="Urgent 2025\top_10_noisy\fileid_83.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_CDiffuSE\fileid_83.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_E-DSBM\fileid_83_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="Urgent 2025\top_10_clean\fileid_841.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="Urgent 2025\top_10_noisy\fileid_841.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_CDiffuSE\fileid_841.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_E-DSBM\fileid_841_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="Urgent 2025\top_10_clean\fileid_85.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="Urgent 2025\top_10_noisy\fileid_85.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_CDiffuSE\fileid_85.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_E-DSBM\fileid_85_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="Urgent 2025\top_10_clean\fileid_90.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="Urgent 2025\top_10_noisy\fileid_90.flac"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_CDiffuSE\fileid_90.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="Urgent 2025\top_10_enhanced_E-DSBM\fileid_90_enhanced.wav"></audio>
+    </div>
+</div>
+<h2 class="sub-title">VoiceBank+DEMAND Dataset (Seen Conditions)</h2>
+<div class="grid-container">
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="VB+DMD\top_10_clean\p232_093.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="VB+DMD\top_10_noisy\p232_093.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="VB+DMD\top_10_enhanced_CDiffuSE\p232_093.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="VB+DMD\top_10_enhanced_E-DSBM\p232_093_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="VB+DMD\top_10_clean\p232_097.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="VB+DMD\top_10_noisy\p232_097.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="VB+DMD\top_10_enhanced_CDiffuSE\p232_097.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="VB+DMD\top_10_enhanced_E-DSBM\p232_097_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="VB+DMD\top_10_clean\p232_264.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="VB+DMD\top_10_noisy\p232_264.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="VB+DMD\top_10_enhanced_CDiffuSE\p232_264.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="VB+DMD\top_10_enhanced_E-DSBM\p232_264_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="VB+DMD\top_10_clean\p232_296.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="VB+DMD\top_10_noisy\p232_296.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="VB+DMD\top_10_enhanced_CDiffuSE\p232_296.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="VB+DMD\top_10_enhanced_E-DSBM\p232_296_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="VB+DMD\top_10_clean\p257_023.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="VB+DMD\top_10_noisy\p257_023.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="VB+DMD\top_10_enhanced_CDiffuSE\p257_023.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="VB+DMD\top_10_enhanced_E-DSBM\p257_023_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="VB+DMD\top_10_clean\p257_083.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="VB+DMD\top_10_noisy\p257_083.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="VB+DMD\top_10_enhanced_CDiffuSE\p257_083.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="VB+DMD\top_10_enhanced_E-DSBM\p257_083_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="VB+DMD\top_10_clean\p257_085.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="VB+DMD\top_10_noisy\p257_085.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="VB+DMD\top_10_enhanced_CDiffuSE\p257_085.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="VB+DMD\top_10_enhanced_E-DSBM\p257_085_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="VB+DMD\top_10_clean\p257_118.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="VB+DMD\top_10_noisy\p257_118.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="VB+DMD\top_10_enhanced_CDiffuSE\p257_118.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="VB+DMD\top_10_enhanced_E-DSBM\p257_118_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="VB+DMD\top_10_clean\p257_186.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="VB+DMD\top_10_noisy\p257_186.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="VB+DMD\top_10_enhanced_CDiffuSE\p257_186.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="VB+DMD\top_10_enhanced_E-DSBM\p257_186_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="VB+DMD\top_10_clean\p257_245.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="VB+DMD\top_10_noisy\p257_245.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="VB+DMD\top_10_enhanced_CDiffuSE\p257_245.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="VB+DMD\top_10_enhanced_E-DSBM\p257_245_enhanced.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Clean</h3>
+        <audio controls src="VB+DMD\top_10_clean\p257_272.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>Noisy</h3>
+        <audio controls src="VB+DMD\top_10_noisy\p257_272.wav"></audio>
+    </div>
+    <div class="grid-item">
+        <h3>CDiffuSE</h3>
+        <audio controls src="VB+DMD\top_10_enhanced_CDiffuSE\p257_272.wav"></audio>
+    </div>
+    <div class="grid-item highlight">
+        <h3>E-DSBM (Ours)</h3>
+        <audio controls src="VB+DMD\top_10_enhanced_E-DSBM\p257_272_enhanced.wav"></audio>
+    </div>
+</div>
+
+    </div>
+</body>
+</html>
